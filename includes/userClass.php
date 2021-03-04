@@ -74,6 +74,7 @@ class Users
         if ($stmt->rowCount() > 0) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if (password_verify($pwd, $user['password'])) {
+                //make user active
                 $stmt = $this->db->prepare('UPDATE users set status = "1" where userID=?');
                 $stmt->execute([$user['userID']]);
                 $_SESSION['userID'] = $user['userID'];
