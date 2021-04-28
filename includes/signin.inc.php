@@ -11,5 +11,5 @@ if (isset($_POST['psubmit'])) {
         header("location: ../index.php?error=unknown");
     }
 } else {
-    header("location: index.php");
+    header("location: ../index.php");
 }

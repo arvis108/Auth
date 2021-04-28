@@ -1,5 +1,20 @@
 <?php
-require './includes/fb_init.php';
+session_start();
+if (isset($_SESSION['userName'])) {
+header("location:rooms.php");
+}
+require_once __DIR__ . '/vendor/autoload.php'; // change path as needed
+$fb = new Facebook\Facebook([
+  'app_id' => '1126270074475386', // Replace {app-id} with your app id
+  'app_secret' => '0e84af2b7f631ee87af87b61702fe10a',
+  'default_graph_version' => 'v3.2',
+  ]);
+
+$helper = $fb->getRedirectLoginHelper();
+
+$permissions = ['email']; // Optional permissions
+$callbackUrl = htmlspecialchars('http://localhost/Auth/includes/fb-callback.php');
+$loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
 ?>
 
 <!DOCTYPE html>
@@ -17,34 +32,31 @@ require './includes/fb_init.php';
     <div class="container" id="container">
         <div class="form-container"> 
             <form action="includes/signin.inc.php" method="POST">
-           
-            
                 <h1>Ielogojies ar</h1>
                 <div class="social-container">
-                    <a href="<?php echo $login_url; ?>" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="<?php echo $loginUrl; ?>" class="social"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>vai aizpildi laukus</span>
-                <input type="text" name="name_email" value="<?php echo isset($_GET['name_email']) ? $_GET['name_email'] : ''; ?>" placeholder="E-pasts/Lietotājvārds" required/>
-                <input type="password" name = "password" id="loginPwd" placeholder="Parole" required/>
-                <i class="fas fa-eye" id="loginEye"></i>
+                <input type="text" name="name_email" value="<?php echo isset($_GET['name_email']) ? htmlspecialchars($_GET['name_email']) : ''; ?>" placeholder="E-pasts/Lietotājvārds" required/>
+                <div class="pwd_div"><input type="password" name = "password" id="loginPwd" placeholder="Parole" required/>
+                <i class="fas fa-eye" id="loginEye"></i></div>
                 <input type="submit" value="Ienākt" name="psubmit">
-                <a href="#" class="forgot">Aizmirsi paroli?</a>
+                <a href="forgot_password.php" class="forgot">Aizmirsi paroli?</a>
                 <?php 
             if (isset($_GET['error'])) {
                 switch ($_GET['error']) {
                     case 'none':
                         echo '<p>Reģistrēšanās bija veiksmīga! Varat pieslēgties!</p>';
-                        break;
-                    case 'unknown':
-                        echo '<p>Nepareizs lietotājvārds un/vai parole!</p>';
-                        break;
-                    case 'wrong':
-                        echo '<p>Nepareizs lietotājvārds un/vai parole!</p>';
-                        break;                                
+                        break;                               
                     case 'empty':
                         echo '<p>Aizpildiet visus laukus!</p>';
+                        break;                                
+                    case 'emailnotvalidated':
+                        echo '<p>Jūsu E-pasts nav verificēts! Lūdzu apskatieties savu E-pastu.</p>';
+                        break;                                
+                    case 'toomanyattempts':
+                        echo '<p>Tika veikti pārāk daudzi neveiksmīgi mēģinājumi lūdzu uzgaidiet.</p>';
                         break;                                
                     default:
                     echo '<p>Nepareizs lietotājvārds un/vai parole!</p>';

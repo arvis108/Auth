@@ -3,10 +3,14 @@ session_start();
 require_once './vendor/autoload.php';
 require 'includes/functions.ini.php';
 require 'includes/databasecontroll.php';
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
+    include './includes/logout.inc.php';
+}
+$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 //ja lietotājs nav ielogojies
 //vai arī norādītai lietotāja identifikators neeksisē
 //tiek aizsūtīts uz sākuma lapu
-if(!isset($_SESSION['userID']) || !checkLogin($conn,$_SESSION['userID']) ){
+if(!isset($_SESSION['userName']) || !checkLoginState($conn,$_SESSION['userName'],$_SESSION['pwd']) ){
     header("location: index.php");
 }
 
@@ -28,7 +32,8 @@ if (!in_array($_GET['room'], $white_list)) {
     header("location: rooms.php");
 }
 }
-
+$pic = htmlspecialchars($_GET['room']);
+$profpic = $pic.'.jpg';
 ?>
 
 <!DOCTYPE html>
@@ -40,39 +45,54 @@ if (!in_array($_GET['room'], $white_list)) {
     <link rel="stylesheet" href="styles/chat_styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Document</title>
+    <style type="text/css">
+
+    .wrapper {
+        background-image: url('<?php echo "img/$profpic" ;?>');
+        background-position: center; 
+        background-repeat: no-repeat; 
+        background-size: cover; 
+    }
+</style>
 </head>
 
 <body>
     <div class="wrapper">
     <div class="flex">
         <h1>Welcome to <?php echo $_GET['room'];?> Room!</h1>
-        <form action="./includes/logout.inc.php" method="POST">
+        <form action="./includes/logout.inc.php" method="POST" class="logout_form">
         <input type="submit" name="logout" value="Log-Out">
+        
     </form></div>
 
         <div class="chat_wrapper">
             <div class="chat" id="chat">
             </div>
-            <form method="POST">
-                <textarea name="message" id="message" cols="30" rows="10" class="textarea"></textarea>
+            <form method="POST" class="send_form flex">
+                <div class="button">
+                    <a href="rooms.php">Atpakaļ</a>
+                </div>
+                <textarea name="message" id="message" class="textarea"></textarea>
+                <input type="submit" value="Sūtīt" class="send_btn">
             </form>
+            <p id="message_error"></p>
 
         </div>
+        
     </div>
 </body>
 <script>
 
 var $chat = $(".chat");
 var chatHeight = $chat.innerHeight();
-var chatIsAtBottom = true;
-
+var room = "<?php echo $_GET['room']?>";
 
 $(document).ready(function(){
     loadChat();
 });
-$('#message').keyup(function(e) {
+
+$('#message').keyup(function(e) { 
     var message = $(this).val();
-    var room = "<?php echo $_GET['room']?>";
     if(e.which == 13){
         $.post('includes/chat.ini.php?action=SendMessage&message='+message+'&room='+room,function(response){
             if(response == 1)
@@ -80,31 +100,41 @@ $('#message').keyup(function(e) {
             loadChat();
             $('#message').val('');
         } else{
-            $('#message').val('There was an error');
+            $('#message').val('Sūtītais teksts saturēja pārāk daudzas rakstzīmes vai arī radās cita kļūme');
         }
             
         });
     }
 });
+$(".send_form").submit(function( event ) {
+    event.preventDefault();
+    var message = $('#message').val();
+    $.ajax({
+                    type: 'post',
+                    url: 'includes/chat.ini.php?action=SendMessage&message='+message+'&room='+room+'',
+                    data: $('.send_form').serialize(),
+                    success: function(response) {
+                        if(response == 1)
+                        {
+                        loadChat();
+                        $('#message').val('');
+                        } else{
+                        $('#message').val('Sūtītais teksts saturēja pārāk daudzas rakstzīmes vai arī radās cita kļūme');
+                        }
+                    }
+                });
+// your code here
+});
+
+
 function loadChat(){
     var room = "<?php echo $_GET['room']?>";
     $.post('includes/chat.ini.php?action=getMessages&room='+room,function(response){
             $('.chat').html(response);
-            if(chatIsAtBottom){
-    $chat.stop().animate({
-      scrollTop: $chat[0].scrollHeight - chatHeight
-    },600);
-  }
-            // var d = $('#chat');
-            // d.scrollTop(d.prop("scrollHeight"));
+            var d = $('#chat');
+            d.scrollTop(d.prop("scrollHeight"));
         });
 }
-
-function checkBottom(){
-  chatIsAtBottom = $chat[0].scrollTop + chatHeight >= $chat[0].scrollHeight;
-}
-
-$chat.scrollTop( $chat[0].scrollHeight ).on("scroll", checkBottom);
 
 
 setInterval(() => {

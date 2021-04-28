@@ -91,21 +91,16 @@ input {
   margin: 8px 0;
   width: 100%;
 }
-
-input[type="password"]{
+.pwd_div{
   position: relative;
+  width: 100%;
 }
-.bloks i, #loginEye{
-  position: absolute;
-  right: 15px;
-  top: 50%;
+#loginEye,#loginEyeRepeat{
   color: #ccc;
   cursor: pointer;
-  transform: translateY(-50%);
-}
-#loginEye{
-  right: 65px;
-  top: 60%;
+  position: absolute;
+  right: 5%;
+  top: 40%;
 }
 
 .bloks i.active::before, #loginEye.active::before{
@@ -220,3 +215,103 @@ input[type="password"]{
   visibility: visible;
   opacity: 1;
 }
+
+.container_scroll{
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #ff416c;
+  background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  height: 100%;
+  margin-left: 300px;
+}
+.bigger{
+  width: 968px;
+  max-width: 100%;
+  min-height: 480px;
+}
+.smaller{
+  width: 30%;
+}
+.pievienot_form{
+  padding: 0 10px;
+}
+input[type='submit'].rediget_submit{
+  background-color: #a01f3d;
+}
+
+.cb_bloks {
+  display: flex;
+  align-items: flex-end;
+}
+
+.cb {
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+}
+
+.cb:active {
+  background: #4066A5;
+}
+
+.cb_bloks span {
+  font-size: 16px;
+  color: #6A707B;
+}
+
+.cb_bloks span a {
+  color: #000;
+  font-size: 16px;
+}
+
+.cb_bloks span a:hover {
+  color: #4066A5;
+}
+
+.cb_bloks span a:visited {
+  color: #233759;
+}
+
+.error_p{
+  text-align: left;
+}
+/* https://css-tricks.com/password-strength-meter/ */
+progress {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+  margin: 0 auto 1em;
+  width: 100%;
+  height: 0.5em;
+
+  /* Applicable only to Firefox */
+  background: none;
+  background-color: rgba(226, 8, 8, 0.1);
+}
+
+progress::-webkit-progress-bar {
+  background: none;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+progress[value="1"]{ background: red; }
+progress[value="2"]{ background: red; }
+progress[value="3"]{ background: red; }
+progress[value="4"]{ background: red; }
+
+input::-ms-reveal,
+      input::-ms-clear {
+        display: none;
+      }

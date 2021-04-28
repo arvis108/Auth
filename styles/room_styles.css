@@ -6,21 +6,49 @@
 }
 html, body {
     height: 100%;
+    background-color: #000;
 }
 .room{
-    width: fit-content;
+    width: 70%;
     background: rgb(187, 95, 95);
 }
+.right{
+    flex: 40%;
+    background: rgb(230, 137, 137);
+}
+ul{
+    margin: 0 30px;
+    padding: 0;
+    list-style: none;
+    display: grid;
+
+    grid-gap: 1rem;
+}
+li {
+    display: grid;
+    grid-template-columns: 0 1fr;
+    grid-gap: 1.75em;
+    align-items: start;
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  ul li::before {
+    content: attr(data-icon);
+    /* Make slightly larger than the li font-size
+    but smaller than the li grid-gap */
+    font-size: 1.25em;
+  }
 form{
-    width: 100%;
     display: flex;
     justify-content:space-between ;
-padding-right: 20px;
-align-items: center;
+    align-items: center;
 }
 form input[type='submit']{
+    cursor: pointer;
+    border-radius: 10px;
     height: fit-content;
     padding: 10px;
+    margin: 0 5px;
 }
 p{
     font-size: 2rem;
@@ -31,19 +59,22 @@ body{
 width: 100%;
 }
 .wrapper {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
     min-height: 100%; 
 }
 nav{
+    width: 80%;
+    margin: 0 auto;
     background: rgb(121, 43, 43);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.logout{
-    width: 10%;
-}
+
 img {
-    max-width: 100%;
+    width: 100%;
     max-height: 100%;
     object-fit: cover;
     display: flex;
@@ -77,3 +108,196 @@ img {
     box-shadow:0px 0px 0px 4px rgb(36, 36, 36) inset;
     color: #000;
   }
+  h3{
+      margin: 0 auto;
+  }
+
+.logout_btn{
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.pievienot_form{
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pievienot_form input[type='submit']{
+    background-color: coral;
+}
+.flex_forms{
+    display: flex;
+}
+.colum{
+    margin-top: 15px;
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+.delete_form{
+    margin-top: 20px;
+}
+.delete{
+    background-color: rgb(131, 21, 21);
+    color: #FFF;
+}
+
+button{
+    cursor: pointer;
+    border-radius: 10px;
+    height: fit-content;
+    padding: 10px;
+    margin: 5px 5px;
+}
+.bloks,.pbloks{
+    margin-top: 20px;
+    width: 100%;
+    position: relative;
+}
+.pbloks{
+    margin-top: 0px;
+}
+
+span ul li{
+    font-size: 12px;
+    margin: 0;
+}
+.tooltiptext {
+    visibility: hidden;
+    width: 100%;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -180px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.bloks .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.bloks:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+.error_msg{
+    font-weight: normal;
+    font-size: 12px;
+    color: rgb(70, 4, 4);
+    margin: 0;
+    margin-left: 20px;
+}
+
+progress {
+    /* Reset the default appearance */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  
+    margin: 0 auto 1em;
+    width: 100%;
+    height: 0.5em;
+  
+    /* Applicable only to Firefox */
+    background: none;
+    background-color: rgba(226, 8, 8, 0.1);
+  }
+  
+  progress::-webkit-progress-bar {
+    background: none;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  progress[value="1"]{ background: red; }
+  progress[value="2"]{ background: red; }
+  progress[value="3"]{ background: red; }
+  progress[value="4"]{ background: red; }
+  
+  input::-ms-reveal,
+        input::-ms-clear {
+          display: none;
+        }
+
+        .hidden {
+            display: none;
+          }
+          
+          
+          
+          input[type="submit"].submit_btn {
+            border-radius: 20px;
+            border: 1px solid #ff4b2b;
+            background-color: #ff4b2b;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            cursor: pointer;
+          }
+          
+          input[type="submit"].submit_btn:active {
+            transform: scale(0.95);
+          }
+          
+          input[type="submit"].submit_btn:focus {
+            outline: none;
+          }
+          
+          form.profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+          }
+          
+          input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+          }
+          .pwd_div{
+            position: relative;
+            width: 100%;
+          }
+          #loginEye,#loginEyeRepeat{
+            color: #ccc;
+            cursor: pointer;
+            position: absolute;
+            right: 5%;
+            top: 40%;
+          }
+          
+          .bloks i.active::before, #loginEye.active::before{
+            color: #333;
+            content: "\f070";
+          }
+#password-strength-text{
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-size: 14px;
+}
