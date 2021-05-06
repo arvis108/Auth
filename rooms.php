@@ -168,6 +168,21 @@ if(!isset($_SESSION['userName']) || !checkLoginState($conn,$_SESSION['userName']
     
     </div>
     </div>
+    <?php 
+    if(isset($_GET['data']) && $_GET['data'] == 'show'){
+        echo "
+        <script>
+        var view = document.getElementById('user_data');
+        if(view.style.display == 'flex'){
+            view.style.display = 'none';
+        } else{
+            view.style.display = 'flex';
+        }
+        </script>
+        ";
+    }
+    
+    ?>
     <script>
  function togglewiev(params) {
         var view = document.getElementById('user_data');
