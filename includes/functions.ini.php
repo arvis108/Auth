@@ -6,8 +6,9 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'C:\laragon\www\Auth\vendor\phpmailer\phpmailer\src\Exception.php';
 require 'C:\laragon\www\Auth\vendor\phpmailer\phpmailer\src\PHPMailer.php';
-define ('GUSER','authchat1@gmail.com');
-define ('GPWD','krumuvacietis1');
+//edit email username and password
+define ('GUSER','');
+define ('GPWD','');
 
 https://github.com/PHPMailer/PHPMailer
 function smtpmailer($to, $from, $from_name, $subject, $body) { 
