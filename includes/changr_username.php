@@ -1,7 +1,5 @@
 <?php
-session_start();
-require 'databasecontroll.php';
-require 'functions.ini.php';
+require_once 'config.php';
 
 if(isset($_POST['lietotajvarda_submit'])){
     $username = htmlspecialchars($_POST['lietotajvards']);

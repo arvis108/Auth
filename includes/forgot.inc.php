@@ -1,8 +1,5 @@
 <?php 
-require_once 'databasecontroll.php';
-require_once 'functions.ini.php';
-
-
+require_once 'config.php';
 
 if(isset($_POST['subforgot'])){ 
     $login=$_REQUEST['login_var'];

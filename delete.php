@@ -1,7 +1,5 @@
 <?php
-session_start();
-require 'includes/databasecontroll.php';
-require 'includes/functions.ini.php';
+require_once 'includes/config.php';
 if(isset($_POST['delBtn']) && $_SESSION['token2'] == $_POST['del_token'] ) {
     if(deleteUser($conn,$_SESSION['userID'])){
         session_unset();

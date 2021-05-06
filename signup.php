@@ -1,7 +1,5 @@
 <?php
-require 'includes/databasecontroll.php';
-require 'includes/functions.ini.php';
-session_start();
+require_once 'includes/config.php';
 //tiklīdz lietotājs vēlēsies veikt reģistrāciju
 //datu bāzē tiks izdzēsti visi lietotāji, kuri 1h laikā nebūs verificējuši savu E-pastu
 //nepieciešams gadījumā, ja kāds speciāli ir veicis reģistrāciju ar ne savu E-pastu

@@ -1,6 +1,6 @@
 <?php
-require 'databasecontroll.php';
-require 'functions.ini.php';
+require_once 'databasecontroll.php';
+require_once 'functions.ini.php';
 
 class Users
 {
@@ -8,9 +8,10 @@ class Users
     //https://www.c-sharpcorner.com/UploadFile/0870a0/registration-and-login-form-in-php-using-oop/
     private $role = 0;
     private $db;       // stores the database handler
+    
     function __construct($conn) {  
         $this->db = $conn;  
-    } 
+    }
 
     function getUserID($name_email){
         $stmt = $this->db->prepare('SELECT userID FROM users WHERE username = ? or email=?');

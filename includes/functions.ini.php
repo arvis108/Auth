@@ -1,5 +1,6 @@
 <?php
 require 'C:\laragon\www\Auth\vendor\autoload.php';
+
 use function Composer\Autoload\includeFile;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -7,10 +8,10 @@ use PHPMailer\PHPMailer\Exception;
 require 'C:\laragon\www\Auth\vendor\phpmailer\phpmailer\src\Exception.php';
 require 'C:\laragon\www\Auth\vendor\phpmailer\phpmailer\src\PHPMailer.php';
 //edit email username and password
-define ('GUSER','');
-define ('GPWD','');
+define ('GUSER','authchat1@gmail.com');
+define ('GPWD','krumuvacietis1');
 
-https://github.com/PHPMailer/PHPMailer
+//https://github.com/PHPMailer/PHPMailer
 function smtpmailer($to, $from, $from_name, $subject, $body) { 
     //https://stackoverflow.com/questions/22927634/smtp-connect-failed-phpmailer-php
     global $error;

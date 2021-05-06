@@ -1,6 +1,5 @@
 <?php 
-require 'includes/databasecontroll.php';
-require 'includes/functions.ini.php';
+require_once 'includes/config.php';
 if(isset($_SESSION["userID"])) 
 {
     header("location:room.php"); 

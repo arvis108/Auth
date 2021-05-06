@@ -1,21 +1,20 @@
 <?php
-session_start();
+require_once 'includes/config.php';
+include 'includes/google-callback.php';
 if (isset($_SESSION['userName'])) {
 header("location:rooms.php");
 }
-require_once __DIR__ . '/vendor/autoload.php'; // change path as needed
+
 $fb = new Facebook\Facebook([
-  'app_id' => '1126270074475386', // Replace {app-id} with your app id
-  'app_secret' => '0e84af2b7f631ee87af87b61702fe10a',
-  'default_graph_version' => 'v3.2',
-  ]);
+    'app_id' => FACEBOOK_CLIENT_ID,
+    'app_secret' => FACEBOOK_CLIENT_SECRET,
+    'default_graph_version' => 'v3.2',
+    ]);
 
 $helper = $fb->getRedirectLoginHelper();
-
 $permissions = ['email']; // Optional permissions
 $callbackUrl = htmlspecialchars('http://localhost/Auth/includes/fb-callback.php');
 $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
-include 'includes/google-callback.php';
 ?>
 
 <!DOCTYPE html>

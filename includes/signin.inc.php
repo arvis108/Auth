@@ -1,7 +1,5 @@
 <?php
-require 'databasecontroll.php';
-require 'userClass.php';
-session_start();
+require_once 'config.php';
 
 if (isset($_POST['psubmit'])) {
     $user = new Users($conn);

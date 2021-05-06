@@ -1,7 +1,7 @@
 <?php 
 //https://www.webslesson.info/2019/09/how-to-make-login-with-google-account-using-php.html
-require 'userClass.php'; 
-include('config.php');
+
+require_once 'config.php';
 
 if(isset($_GET["code"])) {
         $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
