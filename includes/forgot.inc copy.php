@@ -1,28 +1,12 @@
-<?php
-require 'databasecontroll.php';
+<?PHP
+include 'databasecontroll.php';
 
-$stmt = $conn->prepare('SHOW TABLE STATUS FROM chat');
-$stmt->execute();
-
-$tables = array();
-    while ($table = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $tables[] = $table['Name'];
-        echo $table['Name'];
+    $stmt = $conn->prepare('show tables');
+    $stmt->execute();
+    while ($ids = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+        $stmt = $conn->prepare('ALTER TABLE ? COLLATE utf8_general_ci');
+        $stmt->execute([$ids['Tables_in_chat']]);
     }
-
-    foreach ($tables as $table) {
-        if($table == 'password_reset' || $table == 'chatrooms'){
-            continue;
-        }
-        if($table == 'users'){
-            $stmt = $conn->prepare('DELETE FROM '.$table.' WHERE userID = :id ');
-            $stmt->bindValue(':id', '49643227acaaa');
-            
-        }else{
-            $stmt = $conn->prepare('DELETE FROM '.$table.' WHERE user_id = :id');
-            $stmt->bindValue(':id', '49643227acaaa');
-        }
-        $stmt->execute();  
-    }
-
+    echo "The collation of your database has been successfully changed!";
 

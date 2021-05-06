@@ -1,9 +1,13 @@
 <?php
-date_default_timezone_set('Europe/Riga');
+
 require 'databasecontroll.php';
+include('config.php');
+
+//Reset OAuth access token
+$google_client->revokeToken();
 session_start();
 $datetime = date('Y-m-d H:i:s');
-$Logstmt = $conn->prepare('UPDATE logs set loginEndTime = ? WHERE user_id=?');
+$Logstmt = $conn->prepare('UPDATE logs set loginEndTime = ? WHERE fk_userID_logs=?');
 $Logstmt->execute([$datetime,$_SESSION['userID']]);
 $Statusstmt = $conn->prepare('UPDATE users set status = "0" where userID=?');
 $Statusstmt->execute([$_SESSION['userID']]);

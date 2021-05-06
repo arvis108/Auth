@@ -12,7 +12,7 @@ if(isset($_POST['subforgot'])){
         $res = $stmt->fetch(PDO::FETCH_ASSOC);
         $oldftemail = $res['email'];  
         $token = bin2hex(random_bytes(50));
-        $stmt = $conn->prepare("INSERT INTO password_reset(email,user_id, token) VALUES (?,?,?)");
+        $stmt = $conn->prepare("INSERT INTO password_reset(email,fk_userID_reset, token) VALUES (?,?,?)");
     if ($stmt->execute([$oldftemail,$res['userID'],$token])) { 
         $FromName="Auth Chat";
         $FromEmail= GUSER;

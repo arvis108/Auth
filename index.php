@@ -15,6 +15,7 @@ $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email']; // Optional permissions
 $callbackUrl = htmlspecialchars('http://localhost/Auth/includes/fb-callback.php');
 $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+include 'includes/google-callback.php';
 ?>
 
 <!DOCTYPE html>
@@ -34,8 +35,8 @@ $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
             <form action="includes/signin.inc.php" method="POST">
                 <h1>Ielogojies ar</h1>
                 <div class="social-container">
-                    <a href="<?php echo $loginUrl; ?>" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="<?php echo filter_var($loginUrl,FILTER_SANITIZE_URL); ?>" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="<?php echo filter_var($login_url, FILTER_SANITIZE_URL);?>" class="social"><i class="fab fa-google-plus-g"></i></a>
                 </div>
                 <span>vai aizpildi laukus</span>
                 <input type="text" name="name_email" value="<?php echo isset($_GET['name_email']) ? htmlspecialchars($_GET['name_email']) : ''; ?>" placeholder="E-pasts/Lietotājvārds" required/>

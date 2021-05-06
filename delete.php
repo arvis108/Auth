@@ -3,10 +3,11 @@ session_start();
 require 'includes/databasecontroll.php';
 require 'includes/functions.ini.php';
 if(isset($_POST['delBtn']) && $_SESSION['token2'] == $_POST['del_token'] ) {
-    deleteUser($conn,$_SESSION['userID']);
-    session_unset();
-    session_destroy();
-    header("Location: index.php");
+    if(deleteUser($conn,$_SESSION['userID'])){
+        session_unset();
+        session_destroy();
+        header("Location: index.php");
+    }
 }
 if(!isset($_POST['delete'])){
     header("location: rooms.php?error=access");

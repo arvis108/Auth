@@ -13,12 +13,12 @@ if(isset($_REQUEST['action'])){
                 echo 0;
                 break;
             }
-            $query = $conn->prepare("INSERT INTO messages SET text = ?,user_id = ?,chatRoom = ?");
+            $query = $conn->prepare("INSERT INTO messages SET text = ?,fk_userID_messages = ?,chatRoom = ?");
             $query->execute([$message,$_SESSION['userID'],$_GET['room']]);
             echo 1;
             break;
         case 'getMessages':
-            $query = $conn->prepare("SELECT a.text,a.time,b.username FROM messages a,users b WHERE chatRoom = ? and a.user_id = b.userID;");
+            $query = $conn->prepare("SELECT a.text,a.time,b.username FROM messages a,users b WHERE chatRoom = ? and a.fk_userID_messages = b.userID;");
             $query->execute([$_GET['room']]);
             $msgs = $query->fetchAll(PDO::FETCH_OBJ);
             $chat ='';

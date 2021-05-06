@@ -76,7 +76,7 @@ class Users
             }
     }
 
-    public function FBregister($username,$email)
+    public function SSOregister($username,$email,$provider)
     {        
         //lai updatotos vecais profils 
         $stmt = $this->db->prepare('SELECT * FROM users WHERE username = ? or email=?');
@@ -96,7 +96,7 @@ class Users
                     }
                 }
             $stmt = $this->db->prepare('INSERT INTO users (userID,username, email,role,verified,email_token,provider) VALUES (?,?,?,?,?,?,?)');
-            $stmt->execute([$id,$username, $email, $this->role,1,NULL,'facebook']);
+            $stmt->execute([$id,$username, $email, $this->role,1,NULL,$provider]);
             } else {
                 //tu ieprieks izmantoji logi formu lai pieteiktos
                 header("location: ../index.php?error=taken");
@@ -104,7 +104,7 @@ class Users
             }
     }
 
-    public function FBlogin($email)
+    public function SSOlogin($email)
     {
         $stmt = $this->db->prepare('SELECT * FROM users WHERE email=?');
         $stmt->execute(array($email));

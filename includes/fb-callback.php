@@ -61,9 +61,9 @@ $stmt = $conn->prepare('SELECT * FROM users WHERE email=?');
         $stmt = $conn->prepare('UPDATE users SET provider = ? WHERE email = ?');
         $stmt->execute(['facebook',$fbemail]);
         } else {
-          $user->FBregister($fbusername,$fbemail);
+          $user->SSOregister($fbusername,$fbemail,'facebook');
         }
-$user->FBlogin($fbemail);
+$user->SSOlogin($fbemail);
 // redirect the user to the profile page if it has "code" GET variable
 if (isset($_GET['code'])) {
   header('Location: ../rooms.php');

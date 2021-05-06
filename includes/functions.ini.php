@@ -72,7 +72,7 @@ function pwdUsernameTest($username, $email, $pwd)
 
 function badPwd($pwd)
 {
-    $myFile = "pwd_black_list.txt";
+    $myFile = "C:\laragon\www\Auth\includes\pwd_black_list.txt";
         $fh = fopen($myFile, "r");
         if ($fh) {
         while ( !feof($fh) ) {
@@ -141,13 +141,13 @@ function user_log($db,$user_id,$successfullyLogged)
         }else{
             $uip = $_SERVER['REMOTE_ADDR'];
         }
-        $stmt = $db->prepare('INSERT INTO logs (user_id,userIP, successfullyLogged) VALUES (?,?,?)');
+        $stmt = $db->prepare('INSERT INTO logs (fk_userID_logs,userIP, successfullyLogged) VALUES (?,?,?)');
         $stmt->execute(array($user_id,$uip,$successfullyLogged));
     }
 function attemptControll($db,$user_id)
     {
         $currentDatetime = date('Y-m-d H:i:s',time()-60*10);
-        $stmt = $db->prepare('SELECT * FROM logs WHERE user_id = ? AND loginStartTime > ? and successfullyLogged = 0');
+        $stmt = $db->prepare('SELECT * FROM logs WHERE fk_userID_logs = ? AND loginStartTime > ? and successfullyLogged = 0');
         $stmt->execute(array($user_id,$currentDatetime));
         if ($stmt->rowCount() > 10) {
             return true;
@@ -156,26 +156,10 @@ function attemptControll($db,$user_id)
     }
 function deleteUser($db,$user_id)
     {
-        $stmt = $db->prepare('SHOW TABLE STATUS FROM chat');
-        $stmt->execute();
-        
-        $tables = array();
-            while ($table = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $tables[] = $table['Name'];
-            }
-        
-            foreach ($tables as $table) {
-                if($table == 'password_reset' || $table == 'chatrooms'){
-                    continue;
-                }
-                if($table == 'users'){
-                    $stmt = $db->prepare('DELETE FROM '.$table.' WHERE userID = :id ');    
-                }else{
-                    $stmt = $db->prepare('DELETE FROM '.$table.' WHERE user_id = :id');
-                }
-                $stmt->bindValue(':id', $user_id);
-                $stmt->execute();  
-            }
-        
+        $stmt = $db->prepare('DELETE FROM users WHERE userID = :id');
+        $stmt->bindValue(':id', $user_id);
+        $stmt->execute(); 
+        return true; 
     }
+        
 

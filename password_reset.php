@@ -1,5 +1,6 @@
 <?php 
 require 'includes/databasecontroll.php';
+require 'includes/functions.ini.php';
 if(isset($_SESSION["userID"])) 
 {
     header("location:room.php"); 
@@ -14,6 +15,15 @@ $stmt->execute([$_GET["token"]]);
 if ($stmt->rowCount() == 0){
     header("location:index.php"); 
 }
+
+$stmt = $conn->prepare("SELECT fk_userID_reset FROM password_reset WHERE token = ?");
+$stmt->execute([$_GET["token"]]);
+$userID = $stmt->fetchColumn();
+$stmt = $conn->prepare("SELECT username,email FROM users WHERE userID = ?");
+$stmt->execute([$userID]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$username = $user['username'];
+$email = $user['email'];
 ?> 
 
 <!DOCTYPE html>
@@ -37,24 +47,26 @@ if ($stmt->rowCount() == 0){
                 if(isset($_POST['sub_set'])){
                     $password = $_POST['password'];
                     $passwordConfirm = $_POST['passwordConfirm'];
-                    //https://www.allphptricks.com/forgot-password-recovery-reset-using-php-and-mysql/#:~:text=%20Steps%20to%20Forgot%20Password%20Recovery%20(Reset)%20using,that...%204%20Create%20a%20CSS%20File%20More
-                    //https://www.php.net/manual/en/datetime.diff.php#:~:text=As%20of%20PHP%205.2.2,%20DateTime%20objects%20can%20be,above%20example%20will%20output:%20bool(false)%20bool(true)%20bool(false)%20.
                     //lai pārbaudītu, vai tokens nav novecojis
                     $origin = new DateTime("now");
-                        if($password ==''){
-                            $error[] = 'Parole netika ievadīta';
+                    $error = array();
+                        if($password =='' || $passwordConfirm ==''){
+                            array_push($error,'Aizpildiet visus laukus');
+                        }  
+                        if(pwdTest($password)){
+                            array_push($error,'Paroles minimālais garums ir 8 simboli');
                         }
-                        if($passwordConfirm ==''){
-                            $error[] = 'Atkārtojiet paroli';
+                        if(pwdCharTest($password)){
+                            array_push($error,'Parole satur pārāk daudz atkārtojošos simbolus');
                         }
-                        if($password != $passwordConfirm){
-                            $error[] = 'Paroles nesakrīt';
+                        if(pwdUsernameTest($username,$email,$password)){
+                            array_push($error,'Parole ir pārāk līdzīga lietotājvārdam un/vai e-pastam');
                         }
-                        if(strlen($password)<8){ // min 
-                        $error[] = 'Paroles minimālais garums ir 8 simboli';
+                        if(badPwd($password)){
+                            array_push($error,'Izvēlētā parole ir kompromitēta! Lūdzu izvēlieties drošāku paroli');
                         }
-                        if(strlen($password)>255){ // Max 
-                        $error[] = 'Maksimālais garums 255 simboli';
+                        if(pwdMatch($password,$passwordConfirm)){
+                            array_push($error,'Paroles nesakrīt');
                         }
                         
                     $stmt = $conn->prepare("SELECT * FROM password_reset WHERE token= ?");
@@ -67,16 +79,16 @@ if ($stmt->rowCount() == 0){
                         $interval = date_diff($origin, $target);
                         //ja tokens eksistē jau vairāk nekā 1h, neatļaut atjaunot paroli
                         if(($interval->format('%r%h.%i')) < -1){
-                            $error[] = 'Link has been expired more than 1h passed ';
+                            $error[] = 'Ir pagājusi vairāk nekā 1h, lūdzu pieprasiet jaunu paroles maiņu';
                         }
                         if(isset($email) != '' ) {
                             $emailtok=$email;
                             }
                         else 
                             { 
-                            $error[] = 'Link has been expired or something missing ';
+                                array_push($error,'Kļūme');
                         }
-            if(!isset($error)){
+            if(count($error) == 0){
             $options = array("cost"=>4); //cost can be lower, because there is no threats
             $password = password_hash($password,PASSWORD_BCRYPT,$options);
             $stmt = $conn->prepare("UPDATE users SET  password = ? WHERE email = ?");
