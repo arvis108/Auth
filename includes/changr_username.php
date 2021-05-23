@@ -2,6 +2,12 @@
 require_once 'config.php';
 
 if(isset($_POST['lietotajvarda_submit'])){
+
+    if(!isset($_SESSION['token1']) || $_SESSION['token1'] != $_POST['username_token'] ) {
+        //CSRF ATTACK
+        header( 'HTTP/1.0 403 Forbidden', TRUE, 403 );
+        exit();
+    } else{
     $username = htmlspecialchars($_POST['lietotajvards']);
     if(invalidUsername($username)){
         header("location: ../rooms.php?error=bad_username&username=$username&data=show");
@@ -18,6 +24,7 @@ if(isset($_POST['lietotajvarda_submit'])){
             header("location: ../rooms.php?error=taken&username=$username&data=show");
             exit();
         }
+    }
 }else {
     header("location: ../index.php");
 }

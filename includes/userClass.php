@@ -8,6 +8,7 @@ class Users
     //https://www.c-sharpcorner.com/UploadFile/0870a0/registration-and-login-form-in-php-using-oop/
     private $role = 0;
     private $db;       // stores the database handler
+    private $pepper='c1isvFdxM42dawfm0OlvxpecFw';
     
     function __construct($conn) {  
         $this->db = $conn;  
@@ -24,7 +25,9 @@ class Users
         $stmt = $this->db->prepare('SELECT * FROM users WHERE username = ? or email=?');
         $stmt->execute(array($username,$email));
         if ($stmt->rowCount() == 0) {
-        $hash = password_hash($pwd, PASSWORD_DEFAULT);
+        
+        $pwd_peppered = hash_hmac("sha256", $pwd, $this->pepper);
+        $hash = password_hash($pwd_peppered, PASSWORD_DEFAULT);
                 //katram lietotājam unikāla id piešķiršana
                     $id = uniqidReal();
                     $this->db->prepare('SELECT * FROM users');
@@ -99,7 +102,7 @@ class Users
             $stmt = $this->db->prepare('INSERT INTO users (userID,username, email,role,verified,email_token,provider) VALUES (?,?,?,?,?,?,?)');
             $stmt->execute([$id,$username, $email, $this->role,1,NULL,$provider]);
             } else {
-                //tu ieprieks izmantoji logi formu lai pieteiktos
+                //tu ieprieks izmantoji login formu lai pieteiktos
                 header("location: ../index.php?error=taken");
                 exit();
             }
@@ -115,6 +118,11 @@ class Users
                 //padara lietotāju aktīvu
                 $stmt = $this->db->prepare('UPDATE users set status = "1" where userID=?');
                 $stmt->execute([$user['userID']]);
+                //saglabā pēdējās aktivitātes laiku
+                $activity = date("Y-m-d h:i:s");
+                $stmt = $this->db->prepare('UPDATE users set last_activity = ? where userID=?');
+                $stmt->execute([$activity,$user['userID']]);
+
                 $_SESSION['userName'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['userID'] = $user['userID'];
@@ -145,12 +153,18 @@ class Users
                 header("location: ../index.php?error=emailnotvalidated&name_email=$name_email");
                 exit();
             }
-            if (password_verify($pwd, $user['password'])) {
+            $pwd_peppered = hash_hmac("sha256", $pwd, $this->pepper);
+            if (password_verify($pwd_peppered, $user['password'])) {
                 //izmaina sesijas sīkfaila saturu
                 session_regenerate_id();
                 //padara lietotāju aktīvu
                 $stmt = $this->db->prepare('UPDATE users set status = "1" where userID=?');
                 $stmt->execute([$user['userID']]);
+
+                $activity = date("Y-m-d h:i:s");
+                $stmt = $this->db->prepare('UPDATE users set last_activity = ? where userID=?');
+                $stmt->execute([$activity,$user['userID']]);
+
                 $_SESSION['userName'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['userID'] = $user['userID'];

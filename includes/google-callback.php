@@ -26,7 +26,7 @@ if(isset($_GET["code"])) {
                     $user->SSOregister($username,$email,'google');
                 }
             $user->SSOlogin($email);
-            header("location: ./rooms.php");
+            header("location: ../rooms.php");
         }
 }
 

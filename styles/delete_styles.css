@@ -44,3 +44,7 @@ a:hover {
     color: rgb(10, 143, 44);
     text-decoration: underline;
 }
+
+input[type='password']{
+    padding: 10px;
+}

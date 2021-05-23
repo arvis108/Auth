@@ -10,10 +10,13 @@ body{
 .wrapper {
   width: 80%;
   margin: 0px auto;
-
   padding: 20px;
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: cover; 
 }
 .chat_wrapper {
+  border: 3px solid #a01f3d;
   width: 70%;
   margin: 10px auto;
   background: #ffffff;
@@ -26,17 +29,18 @@ body{
 }
 .chat {
   height: 80vh;
-  border: 2px solid #ac3279;
+  border: 3px solid hsl(346, 68%, 37%);
   padding: 10px;
   display: flex;
   flex-direction:column;
   align-items: flex-start;
   overflow-y:auto;
+  overflow-x:hidden;
 }
 
 form{
   height: 15vh;
-  background: rgb(56, 26, 26);
+  border: none;
 }
 .logout_form{
   height: auto;
@@ -45,12 +49,13 @@ textarea {
   height: 100%;
   margin: 10px 0;
   width: 100%;
-  border: 1px solid #b3b3b3;
+  border: 2px solid #a01f3d;
   outline: none;
 }
 input[type='submit']{
-  background-color: #011f06;
-  border: 2px solid black;
+  border-radius: 15px;
+  border: 2px solid #e74529;
+  background-color: #ff4b2b;
   color: white;
   padding: 15px 20px;
   text-decoration: none;
@@ -61,8 +66,9 @@ input[type='submit']{
 .send_btn{
   height: 100%;
   width: 20%;
-  background-color: #011f06;
-  border: 2px solid black;
+  border-radius: 15px;
+  border: 2px solid #e74529;
+  background-color: #ff4b2b;
   font-size: 20px;
   cursor: pointer;
 }
@@ -71,8 +77,9 @@ input[type='submit']{
   width: 20%;
 }
 a{
-  background-color: #011f06;
-  border: 2px solid black;
+  border-radius: 15px;
+  border: 2px solid #e74529;
+  background-color: #ff4b2b;
   width: 100%;
   height: 100%;
   font-size: 20px;
@@ -82,4 +89,30 @@ a{
   justify-content: center;
   text-decoration: none;
   color: white;
+}
+.text-bg{
+  border-radius: 10px;
+  background-color: rgb(138, 126, 126);
+}
+.message_data{
+border: 2px solid green;
+background-color: #a01f3d;
+width: fit-content;
+height: fit-content;
+border-radius: 20px;
+}
+.mField{
+  margin-bottom: 10px;
+  word-break: break-word;
+  border: 2px solid greenyellow;
+  border-radius: 10px;
+}
+.chat_msg{
+margin-right: 10px;
+}
+#message_error{
+  width: 200px;
+  height: 30px;
+  background-color: beige;
+  color: #ff4b2b;
 }

@@ -19,25 +19,16 @@ html, body {
 ul{
     margin: 0 30px;
     padding: 0;
-    list-style: none;
+    list-style-type:square;
     display: grid;
-
     grid-gap: 1rem;
 }
 li {
-    display: grid;
-    grid-template-columns: 0 1fr;
-    grid-gap: 1.75em;
-    align-items: start;
-    font-size: 1.5rem;
-    line-height: 1.25;
-  }
-  ul li::before {
-    content: attr(data-icon);
-    /* Make slightly larger than the li font-size
-    but smaller than the li grid-gap */
-    font-size: 1.25em;
-  }
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 form{
     display: flex;
     justify-content:space-between ;
@@ -107,10 +98,8 @@ img {
     background-color: rgb(133, 131, 131);
     box-shadow:0px 0px 0px 4px rgb(36, 36, 36) inset;
     color: #000;
-  }
-  h3{
-      margin: 0 auto;
-  }
+}
+
 
 .logout_btn{
     cursor: pointer;
@@ -196,9 +185,9 @@ span ul li{
     visibility: visible;
     opacity: 1;
 }
-.error_msg{
-    font-weight: normal;
-    font-size: 12px;
+.error_msg,.emsgmissmatch{
+    font-weight: bold;
+    font-size: 14px;
     color: rgb(70, 4, 4);
     margin: 0;
     margin-left: 20px;
@@ -280,7 +269,7 @@ input[type="submit"].submit_btn:focus {
             position: relative;
             width: 100%;
           }
-          #loginEye,#loginEyeRepeat{
+          #loginEye,#loginEyeNew,#loginEyeRepeat{
             color: #ccc;
             cursor: pointer;
             position: absolute;
@@ -297,4 +286,18 @@ input[type="submit"].submit_btn:focus {
     padding: 0;
     font-weight: normal;
     font-size: 14px;
+}
+.line{
+    width: 90%;
+    height: 5px;
+    background-color: #000;
+}
+
+.online{
+    margin-top: 20px;
+}
+.list_username{
+    font-size: 14px;
+    margin: 0;
+    font-weight: 900;
 }

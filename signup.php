@@ -1,12 +1,26 @@
 <?php
 require_once 'includes/config.php';
+include 'includes/google-callback.php';
+if (isset($_SESSION['userName'])) {
+header("location:rooms.php");
+}
+
+$fb = new Facebook\Facebook([
+    'app_id' => FACEBOOK_CLIENT_ID,
+    'app_secret' => FACEBOOK_CLIENT_SECRET,
+    'default_graph_version' => 'v3.2',
+    ]);
+
+$helper = $fb->getRedirectLoginHelper();
+$permissions = ['email']; // Optional permissions
+$callbackUrl = htmlspecialchars('http://localhost/Auth/includes/fb-callback.php');
+$loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+
 //tiklīdz lietotājs vēlēsies veikt reģistrāciju
 //datu bāzē tiks izdzēsti visi lietotāji, kuri 1h laikā nebūs verificējuši savu E-pastu
 //nepieciešams gadījumā, ja kāds speciāli ir veicis reģistrāciju ar ne savu E-pastu
 checkEmailValidation($conn);
-if (isset($_SESSION['userName'])) {
-    header("location:rooms.php");
-    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +41,12 @@ if (isset($_SESSION['userName'])) {
         <div class="form-container">
         
             <form action="includes/signup.inc.php" method="POST">
-                <h1>Reģistrēties</h1>
+                <h1>Ienāc ar</h1>
+                <div class="social-container">
+                    <a href="<?php echo filter_var($loginUrl,FILTER_SANITIZE_URL); ?>" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="<?php echo filter_var($login_url, FILTER_SANITIZE_URL);?>" class="social"><i class="fab fa-google-plus-g"></i></a>
+                </div>
+                <h3>Vai reģistrējies</h3>
                 <div class="bloks">
                 <input type="text"  class = "name" name="username" placeholder="Lietotājvārds" value="<?php echo isset($_GET['username']) ? htmlspecialchars($_GET['username']): ''; ?>" required/>
                 <span class="tooltiptext"><ul><li>Lietotājvārds var sastāvēt no burtiem,cipariem un .-_ simboliem!</li>

@@ -1,4 +1,5 @@
 <?php
+
 require_once 'includes/config.php';
 include 'includes/google-callback.php';
 if (isset($_SESSION['userName'])) {
@@ -15,6 +16,8 @@ $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email']; // Optional permissions
 $callbackUrl = htmlspecialchars('http://localhost/Auth/includes/fb-callback.php');
 $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -38,12 +41,22 @@ $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
                     <a href="<?php echo filter_var($login_url, FILTER_SANITIZE_URL);?>" class="social"><i class="fab fa-google-plus-g"></i></a>
                 </div>
                 <span>vai aizpildi laukus</span>
+
                 <input type="text" name="name_email" value="<?php echo isset($_GET['name_email']) ? htmlspecialchars($_GET['name_email']) : ''; ?>" placeholder="E-pasts/Lietotājvārds" required/>
                 <div class="pwd_div"><input type="password" name = "password" id="loginPwd" placeholder="Parole" required/>
                 <i class="fas fa-eye" id="loginEye"></i></div>
+
+                <!-- <div class="cb_bloks_remember">
+                    <input type="checkbox" class="cb" name="term_cb">     
+                    <span>Atcerēties mani</span>
+                </div> -->
+
                 <input type="submit" value="Ienākt" name="psubmit">
                 <a href="forgot_password.php" class="forgot">Aizmirsi paroli?</a>
                 <?php 
+                if(isset($_GET['password_changed']) && $_GET['password_changed'] == true){
+                    echo '<p>Jūsu parole tika veiksmīgi nomainīta, lūdzu pieslēdzieties izmantojot jauno paroli!</p>';
+                }
             if (isset($_GET['error'])) {
                 switch ($_GET['error']) {
                     case 'none':

@@ -53,7 +53,7 @@ a:hover {
 
 input[type="submit"] {
   border-radius: 20px;
-  border: 1px solid #ff4b2b;
+  border: 1px solid #f3482a;
   background-color: #ff4b2b;
   color: #ffffff;
   font-size: 12px;
@@ -164,11 +164,13 @@ input {
 }
 
 .social-container {
-  margin: 20px 0;
+  margin: 10px 0;
 }
+
 
 .social-container a {
   border: 1px solid #dddddd;
+  border-color: #ff416c;
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;

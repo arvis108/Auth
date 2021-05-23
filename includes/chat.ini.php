@@ -7,29 +7,41 @@ require 'databasecontroll.php';
 session_start();
 if(isset($_REQUEST['action'])){
     switch ($_REQUEST['action']) {
+
         case 'SendMessage':
-            $message = htmlentities(strip_tags($_REQUEST['message']));
-            if(strlen($message) > 255){
-                echo 0;
+            $message = htmlspecialchars($_REQUEST['message']);
+            if(strlen($message) > 510) {
+                echo 'Jūsu sūtītā ziņa ir pārāk gara!';
                 break;
             }
-            $query = $conn->prepare("INSERT INTO messages SET text = ?,fk_userID_messages = ?,chatRoom = ?");
+
+            if($message == '') {
+                break;
+            }
+
+            $query = $conn->prepare("INSERT INTO messages SET text = ?,fk_userID_messages = ?,fk_roomID_messages = ?");
             $query->execute([$message,$_SESSION['userID'],$_GET['room']]);
             echo 1;
             break;
         case 'getMessages':
-            $query = $conn->prepare("SELECT a.text,a.time,b.username FROM messages a,users b WHERE chatRoom = ? and a.fk_userID_messages = b.userID;");
+            $query = $conn->prepare("SELECT a.text,a.time,b.username FROM messages a,users b WHERE a.fk_roomID_messages = ? and a.fk_userID_messages = b.userID;");
             $query->execute([$_GET['room']]);
             $msgs = $query->fetchAll(PDO::FETCH_OBJ);
             $chat ='';
-          foreach($msgs as $msg){
-                $chat .= '<div class ="mField">'.$msg->time.'  '.$msg->username.'   '.$msg->text.'</div>';
-            }
-            echo $chat;
-            break;
+            foreach($msgs as $msg){
+                if($msg->username == $_SESSION['userName']){ 
+                    $username = 'Es';
+                } else {
+                    $username = $msg->username;
+                }
+                    $chat .= '<div class ="mField"> <div class="message_data">'
+                    .$msg->time.'  '.$username.'</div><div class = "chat_msg">'.$msg->text.'</div></div>';
+                    
+                }
+                echo $chat;
+                break;
         
         default:
-            # code...
             break;
     }
 }else{
